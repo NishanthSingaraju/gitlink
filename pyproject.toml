@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "gitstore"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+click = "^8.1.3"
+tenacity = "^8.2.0"
+PyYAML = "^6.0"
+requests = "^2.28.2"
+Jinja2 = "^3.1.2"
+python-on-whales = "^0.57.0"
+fastapi = "^0.90.0"
+python-multipart = "^0.0.5"
+uvicorn = "^0.20.0"
+
+[tool.poetry.scripts]
+warp='gitstore.cli:cli_group'
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

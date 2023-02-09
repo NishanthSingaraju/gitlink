@@ -1,0 +1,4 @@
+name: gcp
+plugins: 
+  - GCPStorageHandler
+storage_handler: GCPStorageHandler
