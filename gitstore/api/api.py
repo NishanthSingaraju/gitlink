@@ -40,5 +40,29 @@ def verify_large_file(oid: str):
     storage_handler = get_storage_handler(config)
     return storage_handler.verify_large_file(oid)
 
+@app.post("/locks/{oid}/lock")
+async def lock_large_file(oid: str):
+    config = load_config('config.yaml')
+    storage_handler = get_storage_handler(config)
+    return await storage_handler.lock_large_file(oid)
+
+@app.post("/locks/{oid}/unlock")
+async def unlock_large_file(oid: str):
+    config = load_config('config.yaml')
+    storage_handler = get_storage_handler(config)
+    return await storage_handler.unlock_large_file(oid)
+
+@app.post("/locks/{oid}/lock")
+async def lock_large_file(oid: str):
+    config = load_config('config.yaml')
+    storage_handler = get_storage_handler(config)
+    return await storage_handler.lock_large_file(oid)
+
+@app.post("/locks/{oid}/unlock")
+async def unlock_large_file(oid: str):
+    config = load_config('config.yaml')
+    storage_handler = get_storage_handler(config)
+    return await storage_handler.unlock_large_file(oid)
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8000, debug=True)

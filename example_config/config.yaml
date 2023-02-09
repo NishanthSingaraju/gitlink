@@ -1,4 +1,4 @@
-name: gcp
+name: gcptest
 plugins: 
   - GCPStorageHandler
 storage_handler: GCPStorageHandler

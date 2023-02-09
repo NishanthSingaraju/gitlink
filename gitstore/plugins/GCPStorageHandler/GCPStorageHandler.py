@@ -23,3 +23,23 @@ class GCPStorageHandler:
     def verify_large_file(self, oid: str):
         blob = self.bucket.blob(oid)
         return {"exist": blob.exists()}
+    
+    def lock_large_file(self, oid: str):
+        blob = self.bucket.blob(oid)
+        if self.is_locked(oid):
+            return {"error": "File is already locked"}
+        blob.metadata = {"locked": "True"}
+        blob.patch()
+        return {"message": "File is now locked"}
+
+    def unlock_large_file(self, oid: str):
+        blob = self.bucket.blob(oid)
+        if not self.is_locked(oid):
+            return {"error": "File is already unlocked"}
+        blob.metadata = {"locked": "False"}
+        blob.patch()
+        return {"message": "File is now unlocked"}
+
+    def is_locked(self, oid: str):
+        blob = self.bucket.blob(oid)
+        return blob.metadata.get("locked", "False") == "True"
