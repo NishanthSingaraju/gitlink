@@ -16,29 +16,22 @@ async def update_config(file: UploadFile):
         f.write(await file.read())
     return {'message': 'Config updated successfully'}
 
-@app.post("/objects/batch/upload")
-async def upload_large_file(operations: str, transfers: str, *, file: UploadFile):
+@app.post("/objects/batch")
+async def get_batch_object(operation, oid):
     config = load_config('config.yaml')
     storage_handler = get_storage_handler(config)
-    return await storage_handler.upload_large_file(file)
-
-@app.get("/objects/{oid}/download")
-def download_large_file(oid: str):
-    config = load_config('config.yaml')
-    storage_handler = get_storage_handler(config)
-    return FileResponse(storage_handler.download_large_file(oid), media_type='application/octet-stream', filename=oid)
+    if operation == "upload":
+        return storage_handler.upload(oid)
+    elif operation == "download":
+        return storage_handler.download(oid)
+    else:
+        raise ValueError("Invalid paramter input")
 
 @app.delete("/objects/{oid}/delete")
 def delete_large_file(oid: str):
     config = load_config('config.yaml')
     storage_handler = get_storage_handler(config)
     return storage_handler.delete_large_file(oid)
-
-@app.post("/objects/batch/verify")
-def verify_large_file(oid: str):
-    config = load_config('config.yaml')
-    storage_handler = get_storage_handler(config)
-    return storage_handler.verify_large_file(oid)
 
 @app.post("/locks/{oid}/lock")
 async def lock_large_file(oid: str):

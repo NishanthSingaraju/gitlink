@@ -1,20 +1,46 @@
 import os
 from google.cloud import storage
 
+import datetime
+
 class GCPStorageHandler:
     def __init__(self):
         self.bucket_name = os.environ.get("BUCKET_NAME")
         self.client = storage.Client.from_service_account_json(os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"))
         self.bucket = self.client.bucket(self.bucket_name)
     
-    async def upload_large_file(self, file):
-        blob = self.bucket.blob(file.filename)
-        blob.upload_from_file(file.file)
-        return {"oid": file.filename}
-    
-    def download_large_file(self, oid: str):
+    async def upload(self, oid: str):
         blob = self.bucket.blob(oid)
-        return blob.download_as_string()
+        expiration = datetime.timedelta(hours=6)
+        upload_url = blob.generate_signed_url(expiration=expiration, method="PUT")
+        upload_url_expiry = datetime.datetime.now() + expiration
+        return {
+            "oid": oid,
+            "actions": {
+                "upload": {
+                    "expires_at": upload_url_expiry,
+                    "header": {"Content-Type": "application/octet-stream"},
+                    "href": upload_url
+                }
+                },
+            "authenticated": True
+        }
+
+    def download(self, oid: str):
+        blob = self.bucket.blob(oid)
+        expiration = datetime.timedelta(hours=6)
+        download_url = blob.generate_signed_url(expiration=expiration, method="GET")
+        download_url_expiry = datetime.datetime.now() + expiration
+        return {
+            "oid": oid,
+            "actions": {
+                "download": {
+                "expires_at": download_url_expiry,
+                "href": download_url
+            }
+            },
+            "authenticated": True
+        }
     
     def delete_large_file(self, oid: str):
         blob = self.bucket.blob(oid)
