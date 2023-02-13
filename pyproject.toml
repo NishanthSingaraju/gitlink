@@ -17,7 +17,7 @@ python-multipart = "^0.0.5"
 uvicorn = "^0.20.0"
 
 [tool.poetry.scripts]
-warp='gitstore.cli:cli_group'
+gink='gitlink.cli:cli_group'
 
 [tool.poetry.dev-dependencies]
 
