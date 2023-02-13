@@ -1,47 +1,33 @@
 import os
 from google.cloud import storage
+from google.oauth2 import service_account 
 
 import datetime
 
 class GCPStorageHandler:
-    def __init__(self):
-        self.bucket_name = os.environ.get("BUCKET_NAME")
-        self.client = storage.Client.from_service_account_json(os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"))
+    def __init__(self, project_name, bucket_name, service_account_json, *args, **kwargs):
+        self.bucket_name = bucket_name
+        self.credentials = service_account.Credentials.from_service_account_file(
+            os.path.basename(service_account_json)
+        )
+        self.client = storage.Client(project=project_name, credentials=self.credentials)
         self.bucket = self.client.bucket(self.bucket_name)
     
-    async def upload(self, oid: str):
+    def upload(self, oid: str):
         blob = self.bucket.blob(oid)
         expiration = datetime.timedelta(hours=6)
         upload_url = blob.generate_signed_url(expiration=expiration, method="PUT")
         upload_url_expiry = datetime.datetime.now() + expiration
-        return {
-            "oid": oid,
-            "actions": {
-                "upload": {
-                    "expires_at": upload_url_expiry,
-                    "header": {"Content-Type": "application/octet-stream"},
-                    "href": upload_url
-                }
-                },
-            "authenticated": True
-        }
+        print(upload_url)
+        return upload_url, upload_url_expiry
 
     def download(self, oid: str):
         blob = self.bucket.blob(oid)
         expiration = datetime.timedelta(hours=6)
         download_url = blob.generate_signed_url(expiration=expiration, method="GET")
         download_url_expiry = datetime.datetime.now() + expiration
-        return {
-            "oid": oid,
-            "actions": {
-                "download": {
-                "expires_at": download_url_expiry,
-                "href": download_url
-            }
-            },
-            "authenticated": True
-        }
-    
+        return download_url, download_url_expiry
+
     def delete_large_file(self, oid: str):
         blob = self.bucket.blob(oid)
         blob.delete()

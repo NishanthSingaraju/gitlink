@@ -13,9 +13,11 @@ from tenacity import (
 
 from gitstore.config import StoreConfig
 from gitstore.context import DockerManager
-from gitstore.constants import PORT, MODIFIED_TIME, GIT_STORE
+from gitstore.constants import PORT, MODIFIED_TIME, GIT_STORE, SERVER_PORT
 from gitstore.docker import get_images, Docker
 from gitstore.utils import get_modified_time_of_file
+
+SERVER_PORT
 
 class GitStoreHandle:
     def __init__(self, config: Path) -> None:
@@ -31,22 +33,23 @@ class GitStoreHandle:
         return self._build_image(
             labels=self._get_labels(),
             build_dir=build_dir,
-            tag=tag,
+            tag=tag or self._config.name,
         )
 
     def run_image(self,
         build_dir: Path = None,
         tag: str = None,
-        local_port: int = PORT,
+        local_port: int = SERVER_PORT,
         detach=True):
 
         image = self.build_docker_image(build_dir=build_dir, tag=tag)
         labels = self._get_labels()
         envs = {}
         envs["PORT"] = local_port
+        publish_ports = [[local_port, SERVER_PORT]]
         container = Docker.client().run(
                 image.id,
-                publish=[[local_port]],
+                publish=publish_ports,
                 detach=detach,
                 labels=labels,
                 envs=envs,

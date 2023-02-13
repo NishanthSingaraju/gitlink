@@ -32,3 +32,6 @@ def given_or_temporary_dir(given_dir: Path = None):
     else:
         with tempfile.TemporaryDirectory() as temp_dir:
             yield Path(temp_dir)
+
+def flatten_dictionary(mapping):
+    return {key: value for d in mapping for key, value in d.items()}

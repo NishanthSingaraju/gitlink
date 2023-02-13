@@ -10,4 +10,5 @@ CONFIG_FILE = "config.yaml"
 REQUIREMENTS_PATH = BASE_DIR / "requirements.txt"
 NAME = "name"
 PORT = 5000
+SERVER_PORT = 8080
 MODIFIED_TIME = "time"
