@@ -19,7 +19,6 @@ class StoreConfig:
         mappings = [MappingConfig.from_dict(mapping) for mapping in data.get("mappings", [])]
         storage_handler = data.get("storage_handler", "")
         vars  = {key: flatten_dictionary(val) for key, val in data.get("vars", {}).items()}
-        print(vars)
         file_path = file_path
         return cls(name, plugins, mappings, file_path, storage_handler, vars)
     

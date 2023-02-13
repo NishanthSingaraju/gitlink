@@ -1,6 +1,7 @@
 from enum import Enum
 from fastapi import Body
 from pydantic import BaseModel
+from typing import List
 
 class Operation(str, Enum):
     """Batch operations"""
@@ -15,7 +16,6 @@ class Object(BaseModel):
     """object field mode"""
     oid: str
     size: int
-    extra: dict = {}
 
 class BatchRequest(BaseModel):
     operation: Operation
@@ -23,17 +23,8 @@ class BatchRequest(BaseModel):
     ref: Ref = None
     objects: list[Object]
 
-class Actions(BaseModel):
-    expires_in: int
-    header: dict = None
-    href: str
-
-class ObjectActions(BaseModel):
-    upload: Actions = None
-    download: Actions = None
 
 class ObjectResponse(BaseModel):
-    transfer: str
-    actions: ObjectActions
-    authenticated: bool = True
-
+    oid: str
+    size: int
+    actions: dict

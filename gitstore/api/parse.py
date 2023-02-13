@@ -1,7 +1,6 @@
 import importlib
 import yaml
-from schema import ObjectResponse, ObjectActions,Actions
-
+from schema import ObjectResponse
 
 CONFIG = 'config.yaml'
 
@@ -13,36 +12,40 @@ def load_config(file_path):
 def get_config():
     return load_config('config.yaml')
 
-def download(oid):
+def download(oid, size):
     config = get_config()
     storage_handler = get_storage_handler(config)
     download_url, download_url_expiry = storage_handler.download(oid)
     return ObjectResponse(
-        oid=oid,
-        actions=ObjectActions(
-            download=Actions(
-                expires_at=download_url_expiry,
-                href=download_url
-            )
-        ),
-        authenticated=True
+            oid=oid,
+            size=size,
+            actions = {
+                "download": {
+                    "href": download_url,
+                    "header": {},
+                    "expires_in": download_url_expiry
+                }
+            }
     )
+    
 
-def upload(oid):
+def upload(oid, size):
     config = get_config()
     storage_handler = get_storage_handler(config)
     upload_url, upload_url_expiry = storage_handler.upload(oid)
     return ObjectResponse(
-        oid=oid,
-        actions=ObjectActions(
-            upload=Actions(
-                expires_at=upload_url_expiry,
-                header={"Content-Type": "application/octet-stream"},
-                href=upload_url
-            )
-        ),
-        authenticated=True
+            oid = oid,
+            size = size,
+            actions = {
+                "upload": {
+                    "href": upload_url,
+                    "header": {},
+                    "expires_in": upload_url_expiry
+                }
+            }
     )
+    
+
 
 def get_storage_handler(config: dict):
     storage_handler_name = config['storage_handler']
@@ -54,4 +57,5 @@ def get_storage_handler(config: dict):
 
 def flatten_dictionary(mapping):
     return {key: value for d in mapping for key, value in d.items()}
+
 

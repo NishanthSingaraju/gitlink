@@ -1,39 +1,40 @@
 import os
 from google.cloud import storage
 from google.oauth2 import service_account 
-
-import datetime
+from datetime import timedelta
 
 class GCPStorageHandler:
-    def __init__(self, project_name, bucket_name, service_account_json, *args, **kwargs):
+    def __init__(self, project_name, bucket_name, service_account_json, prefix = None, *args, **kwargs):
         self.bucket_name = bucket_name
         self.credentials = service_account.Credentials.from_service_account_file(
             os.path.basename(service_account_json)
         )
         self.client = storage.Client(project=project_name, credentials=self.credentials)
         self.bucket = self.client.bucket(self.bucket_name)
+        self.prefix = prefix
     
     def upload(self, oid: str):
-        blob = self.bucket.blob(oid)
-        expiration = datetime.timedelta(hours=6)
-        upload_url = blob.generate_signed_url(expiration=expiration, method="PUT")
-        upload_url_expiry = datetime.datetime.now() + expiration
-        print(upload_url)
-        return upload_url, upload_url_expiry
+        expiration = 3600
+        upload_url = self._get_signed_url(self.prefix, oid, http_method='PUT', expires_in=expiration)
+        return upload_url, expiration
 
     def download(self, oid: str):
-        blob = self.bucket.blob(oid)
-        expiration = datetime.timedelta(hours=6)
-        download_url = blob.generate_signed_url(expiration=expiration, method="GET")
-        download_url_expiry = datetime.datetime.now() + expiration
-        return download_url, download_url_expiry
+        expiration = 3600
+        download_url = self._get_signed_url(self.prefix, oid, expires_in=expiration)
+        return download_url, expiration
 
-    def delete_large_file(self, oid: str):
-        blob = self.bucket.blob(oid)
-        blob.delete()
+
+    def _get_signed_url(self, prefix: str, oid: str, expires_in: int, http_method: str = 'GET') -> str:
+        if prefix is not None:
+            blob = self.bucket.blob(os.path.join(prefix, oid))
+        else: 
+            blob = self.bucket.blob(oid)
+        url = blob.generate_signed_url(expiration=timedelta(seconds=expires_in), method=http_method, version='v4',
+                                            credentials=self.credentials)
+        return url
         
     def verify_large_file(self, oid: str):
-        blob = self.bucket.blob(oid)
+        blob = self.bucket.blob(os.path.join("test", oid))
         return {"exist": blob.exists()}
     
     def lock_large_file(self, oid: str):
