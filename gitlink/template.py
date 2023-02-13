@@ -1,7 +1,7 @@
 import os
 from jinja2 import Template
 
-from gitstore.constants import PLUGINS_DIR
+from gitlink.constants import PLUGINS_DIR
 
 def create_dockerfile(config: dict, target_directory: str):
     env_vars = config.get('env_variables', {})

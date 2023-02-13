@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "gitstore"
+name = "gitlink"
 version = "0.1.0"
-description = ""
-authors = ["Your Name <you@example.com>"]
+description = "Link Git LFS anywhere you want it"
+authors = ["Nishanth Singaraju nishanth.singaraju@gmail.com"]
 
 [tool.poetry.dependencies]
 python = "^3.9"

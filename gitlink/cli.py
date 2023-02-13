@@ -1,9 +1,8 @@
-import os
 from pathlib import Path
 from functools import wraps
 import click
 
-import gitstore
+import gitlink
 
 def error_handling(f):
     @wraps(f)
@@ -65,4 +64,4 @@ def run_image(config, build_dir, tag, port, attach):
 
 
 def _get_store_from_directory(config):
-    return gitstore.load(config)
+    return gitlink.load(config)

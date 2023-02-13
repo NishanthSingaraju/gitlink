@@ -11,11 +11,11 @@ from tenacity import (
     wait_fixed,
 )
 
-from gitstore.config import StoreConfig
-from gitstore.context import DockerManager
-from gitstore.constants import PORT, MODIFIED_TIME, GIT_STORE, SERVER_PORT
-from gitstore.docker import get_images, Docker
-from gitstore.utils import get_modified_time_of_file
+from gitlink.config import StoreConfig
+from gitlink.context import DockerManager
+from gitlink.constants import MODIFIED_TIME, GIT_LINK, SERVER_PORT
+from gitlink.docker import get_images, Docker
+from gitlink.utils import get_modified_time_of_file
 
 SERVER_PORT
 
@@ -81,7 +81,7 @@ class GitStoreHandle:
     def _get_labels(self) -> Dict[str, str]:
         truss_mod_time = get_modified_time_of_file(self._config_path)
         return {
-            GIT_STORE: True,
+            GIT_LINK: True,
             MODIFIED_TIME: truss_mod_time,
         }
     
