@@ -1,1 +1,1 @@
-from gitstore.build import load
+from gitlink.build import load

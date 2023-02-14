@@ -27,6 +27,7 @@ def cli_group(ctx):
     if not ctx.invoked_subcommand:
         click.echo(ctx.get_help())
 
+
 @cli_group.command()
 @click.argument("config")
 @click.argument("build_dir", required=False)
@@ -49,7 +50,7 @@ def build_image(config, build_dir, tag):
 
 
 @cli_group.command()
-@click.argument("config", required=False)
+@click.argument("config")
 @click.argument("build_dir", required=False)
 @click.option("--tag", help="Docker build image tag")
 @click.option("--port", type=int, default=8080, help="Local port used to run image")
@@ -61,6 +62,13 @@ def run_image(config, build_dir, tag, port, attach):
     if build_dir:
         build_dir = Path(build_dir)
     cfg.run_image(build_dir=build_dir, tag=tag, local_port=port, detach=not attach)
+
+
+@cli_group.command()
+@click.argument("config", required=False)
+def deploy(config):
+    cfg = _get_store_from_directory(config=config)
+    cfg.deploy_service()
 
 
 def _get_store_from_directory(config):

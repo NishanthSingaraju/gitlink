@@ -1,6 +1,6 @@
 import logging
 from typing import Dict
-from gitstore.constants import NAME
+from gitlink.constants import NAME
 
 class Docker:
     _client = None

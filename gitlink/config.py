@@ -1,14 +1,15 @@
 import yaml
-from gitstore.utils import flatten_dictionary
+from gitlink.utils import flatten_dictionary
 
 class StoreConfig:
-    def __init__(self, name, plugins, mappings, file_path, storage_handler = "", vars = None):
+    def __init__(self, name, plugins, mappings, file_path, storage_handler = "", vars = None, deployment = None):
         self.name = name
         self.plugins = plugins
         self.mappings = mappings
         self.storage_handler = storage_handler
         self.file_path = file_path
         self.vars = vars
+        self.deployment = deployment if deployment else {}
         
     @classmethod
     def from_yaml(cls, file_path):
@@ -20,7 +21,8 @@ class StoreConfig:
         storage_handler = data.get("storage_handler", "")
         vars  = {key: flatten_dictionary(val) for key, val in data.get("vars", {}).items()}
         file_path = file_path
-        return cls(name, plugins, mappings, file_path, storage_handler, vars)
+        deployment = data.get("deployment", {})
+        return cls(name, plugins, mappings, file_path, storage_handler, vars, deployment)
     
     def to_dict(self):
         return {

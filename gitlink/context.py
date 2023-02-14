@@ -2,11 +2,11 @@ import os
 from pathlib import Path
 import yaml
 
-from gitstore.constants import CONFIG_FILE, API_DIR, PLUGINS_DIR, REQUIREMENTS_PATH, GIT_STORE
-from gitstore.config import StoreConfig
-from gitstore.utils import copy_tree_path, copy_file_path, build_store_directory, given_or_temporary_dir
-from gitstore.docker import Docker
-from gitstore.template import create_dockerfile
+from gitlink.constants import CONFIG_FILE, API_DIR, PLUGINS_DIR, REQUIREMENTS_PATH
+from gitlink.config import StoreConfig
+from gitlink.utils import copy_tree_path, copy_file_path, build_store_directory, given_or_temporary_dir
+from gitlink.docker import Docker
+from gitlink.template import create_dockerfile
 
 class DockerManager:
 

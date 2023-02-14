@@ -16,8 +16,8 @@ from gitlink.context import DockerManager
 from gitlink.constants import MODIFIED_TIME, GIT_LINK, SERVER_PORT
 from gitlink.docker import get_images, Docker
 from gitlink.utils import get_modified_time_of_file
+from gitlink.deployers.deployer import get_deployer
 
-SERVER_PORT
 
 class GitStoreHandle:
     def __init__(self, config: Path) -> None:
@@ -35,6 +35,10 @@ class GitStoreHandle:
             build_dir=build_dir,
             tag=tag or self._config.name,
         )
+
+    def deploy_service(self, build_dir: Path = None):
+        image = self.build_docker_image(build_dir=build_dir)
+        return self._deploy_image(image, self._config.deployment)
 
     def run_image(self,
         build_dir: Path = None,
@@ -84,6 +88,11 @@ class GitStoreHandle:
             GIT_LINK: True,
             MODIFIED_TIME: truss_mod_time,
         }
+    
+    def _deploy_image(self, image, deployment_config: dict):
+        deployer_cls = get_deployer(deployment_config["deployment_type"])
+        deployer = deployer_cls(**deployment_config["vars"])
+        return deployer.deploy(image, deployment_config)
     
 
 def _docker_image_from_labels(labels: dict):

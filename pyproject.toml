@@ -2,7 +2,7 @@
 name = "gitlink"
 version = "0.1.0"
 description = "Link Git LFS anywhere you want it"
-authors = ["Nishanth Singaraju nishanth.singaraju@gmail.com"]
+authors = ["Nishanth Singaraju <nishanth.singaraju@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -15,6 +15,7 @@ python-on-whales = "^0.57.0"
 fastapi = "^0.90.0"
 python-multipart = "^0.0.5"
 uvicorn = "^0.20.0"
+boto3 = "^1.26.70"
 
 [tool.poetry.scripts]
 gink='gitlink.cli:cli_group'
