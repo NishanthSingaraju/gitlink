@@ -2,13 +2,11 @@
 
 GitLink is a tool designed to simplify the process of connecting your Git Large File Storage (LFS) to your Amazon Web Services (AWS) or Google Cloud Platform (GCP) backends. With GitLink, you can easily store large files in your cloud storage buckets, reducing the storage burden on your Git repositories.
 
-GitLink supports multiple cloud storage backends, including AWS S3 and GCP Cloud Storage, and provides a convenient command-line interface for managing your repositories and deploying them to the cloud. The tool is built on top of Docker and can be deployed to various platforms, including AWS Elastic Beanstalk and Google App Engine.
+GitLink supports multiple cloud storage backends, including AWS S3 and GCP Cloud Storage, and provides a convenient command-line interface for managing your repositories and deploying them to the cloud. The tool is built on top of Docker and can be deployed to various platforms, including AWS App Runner and Google App Engine.
 
 To get started with GitLink, clone the repository, install the required dependencies, and configure your cloud storage backend using the provided configuration file. Then, you can use the GitLink command-line interface to build, run, and deploy your repositories to the cloud.
 
-Whether you're working on a large-scale software project or need to store and share large files, GitLink makes it easy to connect your Git LFS to your AWS or GCP backend.
-
-Special thanks to the teams behind the Truss and Giftless repositories for their architectural inspirations. Their work has been invaluable in guiding the development of this project."
+Special thanks to the teams behind the Truss and Giftless repositories for their architectural inspirations. Their work has been invaluable in guiding the development of this project.
 
 # Installing Git LFS
 Git LFS is a command-line extension for git that allows storing large files separately from your Git repository. Here's how you can install Git LFS:
