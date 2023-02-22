@@ -2,16 +2,16 @@
 
 GitLink is a tool designed to simplify the process of connecting your Git Large File Storage (LFS) to your Amazon Web Services (AWS) or Google Cloud Platform (GCP) backends. With GitLink, you can easily store large files in your cloud storage buckets, reducing the storage burden on your Git repositories.
 
-GitLink supports multiple cloud storage backends, including AWS S3 and GCP Cloud Storage, and provides a convenient command-line interface for managing your repositories and deploying them to the cloud. The tool is built on top of Docker and can be deployed to a variety of platforms, including AWS Elastic Beanstalk and Google App Engine.
+GitLink supports multiple cloud storage backends, including AWS S3 and GCP Cloud Storage, and provides a convenient command-line interface for managing your repositories and deploying them to the cloud. The tool is built on top of Docker and can be deployed to various platforms, including AWS Elastic Beanstalk and Google App Engine.
 
-To get started with GitLink, simply clone the repository, install the required dependencies, and configure your cloud storage backend using the provided configuration file. Then, you can use the GitLink command-line interface to build, run, and deploy your repositories to the cloud.
+To get started with GitLink, clone the repository, install the required dependencies, and configure your cloud storage backend using the provided configuration file. Then, you can use the GitLink command-line interface to build, run, and deploy your repositories to the cloud.
 
-Whether you're working on a large-scale software project or simply need to store and share large files, GitLink makes it easy to connect your Git LFS to your AWS or GCP backend.
+Whether you're working on a large-scale software project or need to store and share large files, GitLink makes it easy to connect your Git LFS to your AWS or GCP backend.
 
-Special thanks to the teams behind the Truss and Giftless repositories for their architecture inspirations. Their work has been invaluable in guiding the development of this project."
+Special thanks to the teams behind the Truss and Giftless repositories for their architectural inspirations. Their work has been invaluable in guiding the development of this project."
 
 # Installing Git LFS
-Git LFS is a command-line extension for Git that allows you to store large files in a separate location from your Git repository. Here's how you can install Git LFS:
+Git LFS is a command-line extension for git that allows storing large files separately from your Git repository. Here's how you can install Git LFS:
 
 1) Visit the Git LFS website: https://git-lfs.github.com/
 2) Click on the "Download" button to download the installer for your operating system.
@@ -26,7 +26,7 @@ Poetry is a tool for dependency management and packaging in Python. It allows yo
 2) Follow the installation instructions for your operating system.
 For example, on macOS, you can use Homebrew to install Poetry by running brew install poetry.
 3) Once you've installed Poetry, navigate to the root directory of our project in a terminal.
-4) Run poetry install then poetry shell in the terminal
+4) Run poetry install, then poetry shell in the terminal
 
 
 # Cloning the GitLink Repository
@@ -39,7 +39,7 @@ This will clone the GitLink repository to your local machine.
 # Creating a Configuration File
 After cloning the GitLink repository, you need to create a config.yaml file to configure GitLink with your backend.
 
-1) In a directory outside the GitLink repository i.e.e anywhere, create a new file called config.yaml.
+1) In a directory outside the GitLink repository i.e.e, anywhere, create a new file called config. yaml.
 
 2) Copy the following YAML code into the file:
 
@@ -64,16 +64,16 @@ secrets:
   source: env
   drain: mount
 
-The access and secret key are actually just the strings themselves not a proxy for the values. You need to add your secret for AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY in your environment variables. Specify needed secrets for given backend.
+The access and secret key are just the strings themselves, not a proxy for the values. You must add your secret for AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY in your environment variables. Then, specify the needed secrets for the given backend.
 
-3) In the vars section, replace the bucket_name value with the name of the S3 bucket you want to use for storing Git LFS objects. If you're using GCP, replace AWSStorageHandler with GCPStorageHandler.
+3) In the vars section, replace the bucket_name value with the name of the S3 bucket you want to use for storing Git LFS objects. For example, if you are using GCP, replace AWSStorageHandler with GCPStorageHandler.
 
 
 # Using GitLink Locally
 
 Once you've cloned the GitLink repository and created a config.yaml file, you can use GitLink locally on your machine.
 
-1) Navigate to the root directory of the GitLink repository and run poetry shell to activate the project's virtual environment.
+1) Navigate to the root directory of the GitLink repository and run the poetry shell command to activate the project's virtual environment.
 
 2) Navigate to the config.yaml file. 
 
@@ -82,9 +82,9 @@ Once you've cloned the GitLink repository and created a config.yaml file, you ca
     gink run-image config.yaml . --tag my-image --port 8080 --attach
 This command runs the Docker image locally and attaches it to your terminal.
 
-The --port option specifies the port on which the API will run. In this example, we're using port 8080. You can use any port that is available on your machine.
+The --port option specifies the port the API will run on. In this example, we are using port 8080. Of course, you can use any port available on your machine.
 
-Once the container is running, you can access the API at http://localhost:8080. The API endpoint will provide you with the URL to use for Git LFS.
+Once the container is running, you can access the API at http://localhost:8080. The API endpoint will provide you with the URL for Git LFS.
 
 4) Set the Git LFS endpoint URL to the URL of the GitLink server by running the following command:
 
@@ -93,7 +93,7 @@ Run this command in the repository with your large objects.
 
 5) Track the files that you want to store in Git LFS. You can do this by running the following command:
 
-    git lfs track "*.extension"
+    git lfs track "*.extension."
     Replace *.extension with the file extension of the files that you want to track. For example, if you want to track all mp4 files, you would use git lfs track "*.mp4".
 
 Add the tracked files to your repository and push the changes to the remote repository:
@@ -107,33 +107,33 @@ That's it! Now the large files that you've tracked using Git LFS will be stored 
 # Using GitLink Remotely
 Once you've set up the config.yaml file with your desired configuration, you can deploy your container to AWS, GCP, or other cloud platforms and access it remotely. Here's how to do it:
 
-1) Set up your config.yaml file as described in the previous section.
+1) Set up your config. yaml file as described in the previous section.
 
 2) Run the following command to build a folder with the Docker image and all the files needed for the API:
 
 Option 1# 
 gink build-context <config_file> <build_dir>
-Replace <config_file> with the path to your config.yaml file, and <build_dir> with the path where the Docker image and other API files should be stored. This command will install the necessary plugins and dependencies, and create a Dockerfile in the specified build directory.
+Replace <config_file> with the path to your config.yaml file and <build_dir> with the path where the Docker image and other API files should be stored. This command will install the necessary plugins and dependencies and create a Dockerfile in the specified build directory.
 
 Once the context is built, then:
 
 3) Install AWS Copilot by following the instructions provided in the AWS Copilot documentation.
 4) Navigate to the build directory where the Dockerfile is located. This is the directory specified in the gink build-context command.
 5) Run the following command to initialize the AWS Copilot app:
-copilot app init
-Follow the prompts to create a new app or select an existing app, choose the default deployment environment, and select the workload type as "Load Balanced Web Service".
+Copilot app init
+Follow the prompts to create a new app or select an existing app, choose the default deployment environment, and select the workload type as "Load Balanced Web Service."
 
-When prompted to choose a Dockerfile, enter the relative path to the Dockerfile in the build directory, for example: ./Dockerfile.
+When prompted to choose a Dockerfile, enter the relative path to the Dockerfile in the build directory, for example, ./Dockerfile.
 Enter a name for the service and follow the prompts to choose a service type, configure the load balancer, and configure the VPC and subnets.
 
 Option 1# (only works for AWS ECR)
 
 gink deploy <config_file> 
-Replace <config_file> with the path to your config.yaml file. This command will build the docker image and save it to your ECR registry
+Replace <config_file> with the path to your config.yaml file. This command will build the docker image and save it to your ECR registry.
 
 # Configuration schema
 
-The gink command line tool requires a configuration file in order to build and deploy the application. The configuration file specifies the name of the server, plugins, and the storage backend to use. It also includes variables and secrets that will be used by the backend and plugins.
+The gink command line tool requires a configuration file to build and deploy the application. The configuration file specifies the server's name, plugins, and the storage backend to use. It also includes variables and secrets that the backend and plugins will use.
 
 Here is an example configuration file:
 
@@ -158,42 +158,41 @@ secrets:
 - secrets:
     - names: A list of secret names, not the values
     - source: Where the secrets are coming from. The only option currently supported is "env".
-    - drain: Where the secrets will be pulled from in the Docker image. The only option currently supported is "mount"
+    - drain: Where the secrets will be pulled from in the Docker image. The only option currently supported is "mount."
 
 # Commands
 GitLink provides four different commands that can be run from the command line:
 
 gink build-context [config] {build-dir}
-This command builds a folder with the Docker image and all files needed for the API, including the installation of the plugins. The {config} argument specifies the path to the configuration file, and the optional {build-dir} argument specifies the path to the directory where the build context will be created. If no {build-dir} is provided, the command will use a default directory.
+This command builds a folder with the Docker image and all files needed for the API, including installing the plugins. The {config} argument specifies the path to the configuration file, and the optional {build-dir} argument specifies the path to the directory where the build context will be created. The command will use a default directory if no {build-dir} is provided.
 
 Example usage:
 gink build-context config.yaml
 
 gink build-image [config] {build-dir} --tag {tag}
-This command builds a Docker image based on the built context. The {config} argument specifies the path to the configuration file, and the optional {build-dir} argument specifies the path to the directory where the build context is located. The --tag flag specifies the tag to be used for the Docker image.
+This command builds a Docker image based on the built context. The {config} argument specifies the path to the configuration file, and the optional {build-dir} argument specifies the path to the directory where the build context is located. The --tag flag specifies the tag for the Docker image.
 
 Example usage:
-gink build-image config.yaml --tag my-image:latest
+gink build-image config.yaml --tag my-image: latest
 
 gink run-image [config] {build-dir} --tag {tag} --port {port} --attach {attach}
-This command runs the Docker image locally. The {config} argument specifies the path to the configuration file, and the optional {build-dir} argument specifies the path to the directory where the build context is located. The --tag flag specifies the tag of the Docker image to be run. The --port flag specifies which port to run the server on, and the --attach flag specifies whether to attach to the container or not.
+This command runs the Docker image locally. The {config} argument specifies the path to the configuration file, and the optional {build-dir} argument specifies the path to the directory where the build context is located. The --tag flag specifies the tag of the Docker image to be run. The --port flag specifies which port to run the server on, and then the --attach flag specifies whether to attach to the container.
 
 Example usage:
 gink run-image config.yaml --tag my-image:latest --port 8000 --attach true
 
 gink deploy {config}
-This command deploys the container to AWS, GCP, etc. and generates an API to work with. The {config} argument specifies the path to the configuration file.
+This command deploys the container to AWS, GCP, etc., and generates an API to work with. The {config} argument specifies the path to the configuration file.
 
 Example usage:
 gink deploy config.yaml
 
 # Contributing
 
-We welcome contributions to gitlink! If you find a bug, have a feature request, or want to contribute code, please open an issue or a pull request on our GitHub repository.
+We welcome contributions to gitlink! If you find a bug, have a feature request or want to contribute code, please open an issue or a pull request on our GitHub repository.
 
 # License
 This project is licensed under the Apache 2.0 License - see the LICENSE file for details.
-
 
 # Contact
 If you have any questions or feedback, please feel free to reach out to the project maintainer at nish@unstatiq.com. You can also open an issue on the GitHub repository if you encounter any problems or have suggestions for improvement.
