@@ -41,6 +41,7 @@ After cloning the GitLink repository, you need to create a config.yaml file to c
 
 2) Copy the following YAML code into the file:
 
+```
 name: test
 plugins:
 - AWSStorageHandler
@@ -61,6 +62,7 @@ secrets:
     - AWS_SECRET_ACCESS_KEY
   source: env
   drain: mount
+```
 
 The access and secret key are just the strings themselves, not a proxy for the values. You must add your secret for AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY in your environment variables. Then, specify the needed secrets for the given backend.
 
@@ -77,7 +79,8 @@ Once you've cloned the GitLink repository and created a config.yaml file, you ca
 
 3) Run the following command to build and run a Docker image with the required plugins and dependencies:
 
-    gink run-image config.yaml . --tag my-image --port 8080 --attach
+   ```gink run-image config.yaml . --tag my-image --port 8080 --attach```
+
 This command runs the Docker image locally and attaches it to your terminal.
 
 The --port option specifies the port the API will run on. In this example, we are using port 8080. Of course, you can use any port available on your machine.
@@ -86,20 +89,23 @@ Once the container is running, you can access the API at http://localhost:8080. 
 
 4) Set the Git LFS endpoint URL to the URL of the GitLink server by running the following command:
 
-    git config -f .lfsconfig lfs.url http://localhost:8080
+    ```git config -f .lfsconfig lfs.url http://localhost:8080```
 Run this command in the repository with your large objects.
 
 5) Track the files that you want to store in Git LFS. You can do this by running the following command:
 
-    git lfs track "*.extension."
+    ```git lfs track "*.extension."```
     Replace *.extension with the file extension of the files that you want to track. For example, if you want to track all mp4 files, you would use git lfs track "*.mp4".
 
 Add the tracked files to your repository and push the changes to the remote repository:
 
-6)
-git add .
-git commit -m "Add large files to LFS"
-git push
+6) Treat git like normal
+    ```
+    git add .
+    git commit -m "Add large files to LFS"
+    git push
+    ```
+
 That's it! Now the large files that you've tracked using Git LFS will be stored in the GitLink server backend that you configured in the config.yaml file.
 
 # Using GitLink Remotely
@@ -110,7 +116,7 @@ Once you've set up the config.yaml file with your desired configuration, you can
 2) Run the following command to build a folder with the Docker image and all the files needed for the API:
 
 Option 1# 
-gink build-context <config_file> <build_dir>
+```gink build-context <config_file> <build_dir>```
 Replace <config_file> with the path to your config.yaml file and <build_dir> with the path where the Docker image and other API files should be stored. This command will install the necessary plugins and dependencies and create a Dockerfile in the specified build directory.
 
 Once the context is built, then:
@@ -126,7 +132,7 @@ Enter a name for the service and follow the prompts to choose a service type, co
 
 Option 1# (only works for AWS ECR)
 
-gink deploy <config_file> 
+```gink deploy <config_file> ```
 Replace <config_file> with the path to your config.yaml file. This command will build the docker image and save it to your ECR registry.
 
 # Configuration schema
@@ -134,7 +140,7 @@ Replace <config_file> with the path to your config.yaml file. This command will 
 The gink command line tool requires a configuration file to build and deploy the application. The configuration file specifies the server's name, plugins, and the storage backend to use. It also includes variables and secrets that the backend and plugins will use.
 
 Here is an example configuration file:
-
+```
 name: {name of the server}
 plugins:
 - {list of plugin names}
@@ -148,7 +154,7 @@ secrets:
     - {list of secret names}
   source: {source of secrets}
   drain: {drain of secrets}
-
+```
 - name: The name of the server
 - plugins: The list of plugins to install on the server
 - storage_handler: The backend to upload assets to
@@ -161,29 +167,29 @@ secrets:
 # Commands
 GitLink provides four different commands that can be run from the command line:
 
-gink build-context [config] {build-dir}
+```gink build-context [config] {build-dir}```
 This command builds a folder with the Docker image and all files needed for the API, including installing the plugins. The {config} argument specifies the path to the configuration file, and the optional {build-dir} argument specifies the path to the directory where the build context will be created. The command will use a default directory if no {build-dir} is provided.
 
 Example usage:
-gink build-context config.yaml
+```gink build-context config.yaml```
 
-gink build-image [config] {build-dir} --tag {tag}
+```gink build-image [config] {build-dir} --tag {tag}```
 This command builds a Docker image based on the built context. The {config} argument specifies the path to the configuration file, and the optional {build-dir} argument specifies the path to the directory where the build context is located. The --tag flag specifies the tag for the Docker image.
 
 Example usage:
-gink build-image config.yaml --tag my-image: latest
+```gink build-image config.yaml --tag my-image: latest```
 
 gink run-image [config] {build-dir} --tag {tag} --port {port} --attach {attach}
 This command runs the Docker image locally. The {config} argument specifies the path to the configuration file, and the optional {build-dir} argument specifies the path to the directory where the build context is located. The --tag flag specifies the tag of the Docker image to be run. The --port flag specifies which port to run the server on, and then the --attach flag specifies whether to attach to the container.
 
 Example usage:
-gink run-image config.yaml --tag my-image:latest --port 8000 --attach true
+```gink run-image config.yaml --tag my-image:latest --port 8000 --attach true```
 
 gink deploy {config}
 This command deploys the container to AWS, GCP, etc., and generates an API to work with. The {config} argument specifies the path to the configuration file.
 
 Example usage:
-gink deploy config.yaml
+```gink deploy config.yaml```
 
 # Contributing
 
