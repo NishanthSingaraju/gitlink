@@ -8,7 +8,7 @@ def inject_secrets(config: dict):
     drain_name = DRAIN_MAPPING[config["secrets"]["drain"]]
     drain = importlib.import_module(f"{drain_name}")
     drain_class = getattr(drain, drain_name)()
-    for var_name, var_info in config.items():
+    for var_name, var_info in config["vars"].items():
         if var_info["type"] == "secret":
-            config[var_name]["value"] = drain_class.resolve_secret(var_info["value"])
+            config["vars"][var_name]["value"] = drain_class.resolve_secret(var_info["value"])
     return config

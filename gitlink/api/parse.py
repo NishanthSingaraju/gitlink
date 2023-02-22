@@ -52,8 +52,7 @@ def upload(oid, size):
 def get_storage_handler(config: dict):
     storage_handler_name = config['storage_handler']
     config = inject_secrets(config)
-    variables = {key: val for key, val in config.get("vars", {}).items()}
+    variables = {key: val["value"] for key, val in config.get("vars", {}).items()}
     module = importlib.import_module(f"{storage_handler_name}")
     handler_class = getattr(module, storage_handler_name)
     return handler_class(**variables)
-

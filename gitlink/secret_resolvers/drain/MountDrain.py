@@ -7,4 +7,4 @@ class MountDrain(BaseDrain.BaseDrain):
         if secret_path.exists() and secret_path.is_file():
             with secret_path.open() as secret_file:
                 secret_value = secret_file.read()
-        return secret_value
+                return secret_value

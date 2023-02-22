@@ -64,6 +64,9 @@ class DockerManager:
         DRAIN_MAPPING = {
             "mount": "MountDrain"
         }
+        base_drain_file = "BaseDrain.py"
+        base_drain_path = Path(SECRETS_DIR) / "drain" / base_drain_file
+        copy_file_path(str(base_drain_path), str(target_directory_path / base_drain_file))
         drain_file_path = Path(SECRETS_DIR) / "drain" / (DRAIN_MAPPING[self._config.secrets["drain"]] + ".py")
         if drain_file_path.exists():
             target_path = target_directory_path / (DRAIN_MAPPING[self._config.secrets["drain"]] + ".py")
