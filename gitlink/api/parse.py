@@ -9,8 +9,10 @@ def load_config(file_path):
         config = yaml.safe_load(f)
     return config
 
+
 def get_config():
     return load_config('config.yaml')
+
 
 def download(oid, size):
     config = get_config()
@@ -27,7 +29,6 @@ def download(oid, size):
                 }
             }
     )
-    
 
 def upload(oid, size):
     config = get_config()
@@ -46,16 +47,25 @@ def upload(oid, size):
     )
     
 
-
 def get_storage_handler(config: dict):
     storage_handler_name = config['storage_handler']
-    variables = {key: flatten_dictionary(val)["value"] for key, val in config.get("vars", {}).items()}
+    config = inject_secrets(config)
+    variables = {key: val for key, val in config.get("vars", {}).items()}
     module = importlib.import_module(f"{storage_handler_name}")
     handler_class = getattr(module, storage_handler_name)
     return handler_class(**variables)
 
 
-def flatten_dictionary(mapping):
-    return {key: value for d in mapping for key, value in d.items()}
+
+
+
+def inject_secrets(config: dict):
+    drain_name = config["secrets"]["drain"]
+    drain = importlib.import_module(f"{drain_name}")
+    drain_class = getattr(drain, drain_name)()
+    for var_name, var_info in config.items():
+        if var_info["type"] == "secret":
+            config[var_name]["value"] = drain_class.resolve_secret(var_info["value"])
+    return config
 
 

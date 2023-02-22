@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 import yaml
 
-from gitlink.constants import CONFIG_FILE, API_DIR, PLUGINS_DIR, REQUIREMENTS_PATH
+from gitlink.constants import CONFIG_FILE, API_DIR, PLUGINS_DIR, REQUIREMENTS_PATH, SECRETS_DIR
 from gitlink.config import StoreConfig
 from gitlink.utils import copy_tree_path, copy_file_path, build_store_directory, given_or_temporary_dir
 from gitlink.docker import Docker
@@ -39,6 +39,7 @@ class DockerManager:
         copy_file_path(REQUIREMENTS_PATH, target_directory_path / "requirements.txt")
         self._copy_over_plugins(target_directory_path)
         self._copy_over_file_vars(target_directory_path)
+        self._copy_over_secret_drain(self, target_directory_path)
         copy_file_path(self._config.file_path, target_directory_path / "config.yaml")
         create_dockerfile(self._config.to_dict(), target_directory_path)
         return target_directory_path
@@ -57,3 +58,10 @@ class DockerManager:
         for file in files:
             target_file_path = target_directory_path / os.path.basename(file)
             copy_file_path(str(file), str(target_file_path))
+    
+
+    def _copy_over_secret_drain(self, target_directory_path):
+        drain_file_path = Path(SECRETS_DIR) / "drain" / (self._config.secrets.drain + ".py")
+        if drain_file_path.exists():
+            target_path = target_directory_path / (self._config.secrets.drain + ".py")
+            copy_file_path(str(drain_file_path), str(target_path))

@@ -2,7 +2,7 @@ import yaml
 from gitlink.utils import flatten_dictionary
 
 class StoreConfig:
-    def __init__(self, name, plugins, mappings, file_path, storage_handler = "", vars = None, deployment = None):
+    def __init__(self, name, plugins, mappings, file_path, storage_handler = "", vars = None, deployment = None, secrets = None):
         self.name = name
         self.plugins = plugins
         self.mappings = mappings
@@ -10,6 +10,7 @@ class StoreConfig:
         self.file_path = file_path
         self.vars = vars
         self.deployment = deployment if deployment else {}
+        self.secrets = secrets if secrets else {}
         
     @classmethod
     def from_yaml(cls, file_path):
@@ -22,7 +23,8 @@ class StoreConfig:
         vars  = {key: flatten_dictionary(val) for key, val in data.get("vars", {}).items()}
         file_path = file_path
         deployment = data.get("deployment", {})
-        return cls(name, plugins, mappings, file_path, storage_handler, vars, deployment)
+        secrets = data.get("secrets")
+        return cls(name, plugins, mappings, file_path, storage_handler, vars, deployment, secrets)
     
     def to_dict(self):
         return {

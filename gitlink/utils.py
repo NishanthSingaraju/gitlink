@@ -14,7 +14,6 @@ def copy_file_path(src: Path, dest: Path):
     return copy_file(str(src), str(dest))
 
 def build_store_directory() -> Path:
-    """Builds a directory under ~/.truss/models for the purpose of creating a Truss at."""
     rand_suffix = "".join(random.choices(string.ascii_uppercase + string.digits, k=6))
     target_directory_path = Path(
         Path.home(), ".git_store", f"{rand_suffix}"

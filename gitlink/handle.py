@@ -17,6 +17,7 @@ from gitlink.constants import MODIFIED_TIME, GIT_LINK, SERVER_PORT
 from gitlink.docker import get_images, Docker
 from gitlink.utils import get_modified_time_of_file
 from gitlink.deployers.deployer import get_deployer
+from gitlink.secret_resolvers.secret_resolver import SecretResolver
 
 
 class GitStoreHandle:
@@ -45,7 +46,8 @@ class GitStoreHandle:
         tag: str = None,
         local_port: int = SERVER_PORT,
         detach=True):
-
+        
+        secrets_mount_dir_path = self._prepare_secrets_mount_dir()
         image = self.build_docker_image(build_dir=build_dir, tag=tag)
         labels = self._get_labels()
         envs = {}
@@ -57,6 +59,13 @@ class GitStoreHandle:
                 detach=detach,
                 labels=labels,
                 envs=envs,
+                mounts=[
+                    [
+                        "type=bind",
+                        f"src={str(secrets_mount_dir_path)}",
+                        "target=/secrets",
+                    ]
+                ],
             )
         base_url = f"http://localhost:{local_port}/"
         try:
@@ -83,10 +92,10 @@ class GitStoreHandle:
         return build_image_result
     
     def _get_labels(self) -> Dict[str, str]:
-        truss_mod_time = get_modified_time_of_file(self._config_path)
+        gitlink_mod_time = get_modified_time_of_file(self._config_path)
         return {
             GIT_LINK: True,
-            MODIFIED_TIME: truss_mod_time,
+            MODIFIED_TIME: gitlink_mod_time,
         }
     
     def _deploy_image(self, image, deployment_config: dict):
@@ -94,7 +103,14 @@ class GitStoreHandle:
         deployer = deployer_cls(**deployment_config["vars"])
         return deployer.deploy(image, deployment_config)
     
+    def _prepare_secrets_mount_dir(self) -> Path:
+        resolver = SecretResolver(self._config.secrets["source"])
+        for secret in self._config.secrets.names:
+            resolver.resolve_secret(secret)
+        return resolver.get_directory_path()
+        
 
+    
 def _docker_image_from_labels(labels: dict):
     images = get_images(labels)
     if images and isinstance(images, list):

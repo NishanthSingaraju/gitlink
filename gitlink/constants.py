@@ -8,6 +8,7 @@ API_DIR = CODE_DIR / "api"
 PLUGINS_DIR = CODE_DIR / "plugins"
 CONFIG_FILE = "config.yaml"
 REQUIREMENTS_PATH = BASE_DIR / "requirements.txt"
+SECRETS_DIR = CODE_DIR / "secret_resolvers"
 NAME = "name"
 PORT = 5000
 SERVER_PORT = 8080

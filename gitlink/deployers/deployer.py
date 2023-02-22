@@ -1,7 +1,7 @@
-from gitlink.deployers.aws_fargate_deployer import AWSFargateDeployer
+from gitlink.deployers.aws_ecr_deployer import AWSEcrDeployer
 
 deployment_types = {
-    "aws_fargate_deployer": AWSFargateDeployer
+    "aws_ecr_deploy": AWSEcrDeployer
 }
 
 def get_deployer(deploy_type):

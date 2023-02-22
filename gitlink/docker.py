@@ -29,8 +29,8 @@ def kill_containers(labels: Dict[str, str]):
     for container in containers:
         container_labels = container.config.labels
         if NAME in container_labels:
-            truss_dir = container_labels[NAME]
-            logging.info(f"Killing Container: {container.id} for {truss_dir}")
+            gitlink_dir = container_labels[NAME]
+            logging.info(f"Killing Container: {container.id} for {gitlink_dir}")
     try:
         Docker.client().container.kill(containers)
     except DockerException:
