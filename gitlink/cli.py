@@ -31,7 +31,6 @@ def cli_group(ctx):
 @cli_group.command()
 @click.argument("config")
 @click.argument("build_dir", required=False)
-@error_handling
 def build_context(config, build_dir) -> None:
     cfg = _get_store_from_directory(config=config)
     cfg.docker_build_setup(build_dir)

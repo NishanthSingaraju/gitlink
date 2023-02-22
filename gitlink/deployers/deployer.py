@@ -1,4 +1,4 @@
-from gitlink.deployers.aws_ecr_deployer import AWSEcrDeployer
+from gitlink.deployers.AWSEcrDeployer import AWSEcrDeployer
 
 deployment_types = {
     "aws_ecr_deploy": AWSEcrDeployer

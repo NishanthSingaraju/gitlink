@@ -2,6 +2,8 @@ import importlib
 import yaml
 from schema import ObjectResponse
 
+from secrets import inject_secrets
+
 CONFIG = 'config.yaml'
 
 def load_config(file_path):
@@ -54,18 +56,4 @@ def get_storage_handler(config: dict):
     module = importlib.import_module(f"{storage_handler_name}")
     handler_class = getattr(module, storage_handler_name)
     return handler_class(**variables)
-
-
-
-
-
-def inject_secrets(config: dict):
-    drain_name = config["secrets"]["drain"]
-    drain = importlib.import_module(f"{drain_name}")
-    drain_class = getattr(drain, drain_name)()
-    for var_name, var_info in config.items():
-        if var_info["type"] == "secret":
-            config[var_name]["value"] = drain_class.resolve_secret(var_info["value"])
-    return config
-
 

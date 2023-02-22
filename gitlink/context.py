@@ -39,7 +39,7 @@ class DockerManager:
         copy_file_path(REQUIREMENTS_PATH, target_directory_path / "requirements.txt")
         self._copy_over_plugins(target_directory_path)
         self._copy_over_file_vars(target_directory_path)
-        self._copy_over_secret_drain(self, target_directory_path)
+        self._copy_over_secret_drain(target_directory_path)
         copy_file_path(self._config.file_path, target_directory_path / "config.yaml")
         create_dockerfile(self._config.to_dict(), target_directory_path)
         return target_directory_path
@@ -61,7 +61,10 @@ class DockerManager:
     
 
     def _copy_over_secret_drain(self, target_directory_path):
-        drain_file_path = Path(SECRETS_DIR) / "drain" / (self._config.secrets.drain + ".py")
+        DRAIN_MAPPING = {
+            "mount": "MountDrain"
+        }
+        drain_file_path = Path(SECRETS_DIR) / "drain" / (DRAIN_MAPPING[self._config.secrets["drain"]] + ".py")
         if drain_file_path.exists():
-            target_path = target_directory_path / (self._config.secrets.drain + ".py")
+            target_path = target_directory_path / (DRAIN_MAPPING[self._config.secrets["drain"]] + ".py")
             copy_file_path(str(drain_file_path), str(target_path))

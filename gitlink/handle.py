@@ -46,7 +46,7 @@ class GitStoreHandle:
         tag: str = None,
         local_port: int = SERVER_PORT,
         detach=True):
-        
+
         secrets_mount_dir_path = self._prepare_secrets_mount_dir()
         image = self.build_docker_image(build_dir=build_dir, tag=tag)
         labels = self._get_labels()
@@ -105,12 +105,11 @@ class GitStoreHandle:
     
     def _prepare_secrets_mount_dir(self) -> Path:
         resolver = SecretResolver(self._config.secrets["source"])
-        for secret in self._config.secrets.names:
+        for secret in self._config.secrets["names"]:
             resolver.resolve_secret(secret)
         return resolver.get_directory_path()
         
 
-    
 def _docker_image_from_labels(labels: dict):
     images = get_images(labels)
     if images and isinstance(images, list):

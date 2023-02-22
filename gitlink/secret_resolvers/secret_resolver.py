@@ -18,5 +18,5 @@ class SecretResolver:
     def resolve_secret(self, secret_name):
         return self.resolver.resolve_secret(secret_name)
     
-    def get_directory(self):
+    def get_directory_path(self):
         return self.resolver.get_secret_path
