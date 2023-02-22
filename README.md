@@ -8,6 +8,8 @@ To get started with GitLink, simply clone the repository, install the required d
 
 Whether you're working on a large-scale software project or simply need to store and share large files, GitLink makes it easy to connect your Git LFS to your AWS or GCP backend.
 
+Special thanks to the teams behind the Truss and Giftless repositories for their architecture inspirations. Their work has been invaluable in guiding the development of this project."
+
 # Installing Git LFS
 Git LFS is a command-line extension for Git that allows you to store large files in a separate location from your Git repository. Here's how you can install Git LFS:
 
